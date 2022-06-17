@@ -1,19 +1,18 @@
+//SPDX-License-Identifier: Unlicense
+
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+describe("CampaignHandler", function () {
+  it("Should create a new campaign", async function () {
+    const CampaignHandler = await ethers.getContractFactory("CampaignHandler");
+    const campaignHandler = await CampaignHandler.deploy();
+    await campaignHandler.deployed();
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    const goal = 1000000;
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
-
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    expect(await campaignHandler.newCampaign(goal, "Sound Pack 1", "The sound of silence")).to.emit(campaignHandler, "LogNewCampaign");
+    console.log(await campaignHandler.listActive());
   });
+  
 });
