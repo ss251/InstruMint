@@ -10,13 +10,8 @@ import "hardhat/console.sol";
 contract NFT is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-    address contractAddress;
 
-    constructor(address campaignAddress)
-        ERC721("InstruMint Content Tokens", "INSTR")
-    {
-        contractAddress = campaignAddress;
-    }
+    constructor() ERC721("InstruMint Content Tokens", "INSTR") {}
 
     function createToken(string memory tokenURI) public returns (uint256) {
         _tokenIds.increment();

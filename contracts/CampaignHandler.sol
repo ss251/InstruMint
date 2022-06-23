@@ -2,15 +2,26 @@
 pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "./NFT.sol";
 
 contract CampaignHandler {
     Campaign[] public campaigns;
+
+    NFT nft;
+
+    using Counters for Counters.Counter;
+    Counters.Counter private _campaignIds;
+
+    // allowing the creator to withdraw ETH only after they have minted an NFT
+    error CreatorHasNotMintedNFT();
 
     event LogContribute(address sender, uint256 amount, uint32 campaignID);
     event LogNewCampaign(address sender, uint256 goal);
     event LogCloseCampaign(uint32 campaignID, bool isFunded);
 
     struct Campaign {
+        uint256 campaignId;
         bool isActive;
         bool isFunded;
         string contentName;
@@ -19,13 +30,16 @@ contract CampaignHandler {
         uint256 total;
         uint256 startDate;
         address creator;
-        string tokenURI;
+        string ipfsCID;
+        uint256 tokenURI;
     }
 
     mapping(address => Campaign[]) public creatorToCampaign;
+    mapping(address => uint256) pendingWithdrawals;
 
-    constructor() {
+    constructor(address _nft) {
         console.log("Deploying contract CampaignHandler");
+        nft = NFT(_nft);
     }
 
     function contribute(uint256 amount, uint32 campaignID) external payable {
@@ -48,13 +62,15 @@ contract CampaignHandler {
         uint256 _goal,
         string memory _contentName,
         string memory _contentInfo,
-        string memory _tokenURI
+        string memory _ipfsCID
     ) external {
+        _campaignIds.increment();
         emit LogNewCampaign(msg.sender, _goal);
         require(_goal > 0, "Campaign goal must be greater than 0 Wei.");
 
         campaigns.push(
             Campaign(
+                _campaignIds.current(),
                 true,
                 false,
                 _contentName,
@@ -63,11 +79,13 @@ contract CampaignHandler {
                 0,
                 block.timestamp,
                 msg.sender,
-                _tokenURI
+                _ipfsCID,
+                0
             )
         );
         creatorToCampaign[msg.sender].push(
             Campaign(
+                _campaignIds.current(),
                 true,
                 false,
                 _contentName,
@@ -76,7 +94,8 @@ contract CampaignHandler {
                 0,
                 block.timestamp,
                 msg.sender,
-                _tokenURI
+                _ipfsCID,
+                0
             )
         );
     }
@@ -96,7 +115,23 @@ contract CampaignHandler {
             .isActive = false;
         creatorToCampaign[campaigns[campaignID].creator][campaignID]
             .isFunded = _isFunded;
+        pendingWithdrawals[msg.sender] = creatorToCampaign[
+            campaigns[campaignID].creator
+        ][campaignID].goal;
         emit LogCloseCampaign(campaignID, _isFunded);
+    }
+
+    function mintAndUpdate(string memory ipfsCID, uint32 campaignId) external {
+        require(
+            creatorToCampaign[campaigns[campaignId].creator][campaignId]
+                .isActive == false
+        );
+        require(
+            creatorToCampaign[campaigns[campaignId].creator][campaignId]
+                .isFunded == true
+        );
+        uint256 tokenURI = nft.createToken(ipfsCID);
+        creatorToCampaign[msg.sender][campaignId].tokenURI = tokenURI;
     }
 
     function listActive() external view returns (Campaign[] memory) {
@@ -137,13 +172,19 @@ contract CampaignHandler {
         return campaigns.length;
     }
 
-    function getCampaignTokenURI(uint32 campaignID)
+    function getCampaignIpfsCID(uint256 campaignID)
         external
         view
         returns (string memory)
     {
-        return campaigns[campaignID].tokenURI;
+        return campaigns[campaignID].ipfsCID;
     }
 
-    function withdraw(uint256 amount) external {}
+    function withdraw(uint256 campaignId) external {
+        if (creatorToCampaign[msg.sender][campaignId].tokenURI == 0)
+            revert CreatorHasNotMintedNFT();
+        uint256 amount = pendingWithdrawals[msg.sender];
+        pendingWithdrawals[msg.sender] = 0;
+        payable(msg.sender).transfer(amount);
+    }
 }
