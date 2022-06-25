@@ -1,8 +1,17 @@
 const hre = require("hardhat");
 
 async function main() {
-    const CampaignHandler = await hre.ethers.getContractFactory("CampaignHandler");
-    const campaignHandler = await CampaignHandler.deploy();
+  const NFT = await hre.ethers.getContractFactory("NFT");
+  const nft = await NFT.deploy();
+
+  await nft.deployed();
+
+  console.log("NFT deployed to:", nft.address);
+
+  const CampaignHandler = await hre.ethers.getContractFactory(
+    "CampaignHandler"
+  );
+  const campaignHandler = await CampaignHandler.deploy(nft.address);
 
   await campaignHandler.deployed();
 
