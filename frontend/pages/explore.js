@@ -15,19 +15,19 @@ import CampaignCard from "../components/CampaignCard";
 
 const ethers = Moralis.web3Library;
 
-const projectId = "2B3vjaKKVpRqv8a6IZeS5CyPkwg";
-const projectSecret = "cb0b062f98aa8c0fd5451253b537d257";
-const auth =
-  "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
+// const projectId = "2B3vjaKKVpRqv8a6IZeS5CyPkwg";
+// const projectSecret = "cb0b062f98aa8c0fd5451253b537d257";
+// const auth =
+//   "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
 
-const client = create({
-  host: "ipfs.infura.io",
-  port: 5001,
-  protocol: "https",
-  headers: {
-    authorization: auth,
-  },
-});
+// const client = create({
+//   host: "ipfs.infura.io",
+//   port: 5001,
+//   protocol: "https",
+//   headers: {
+//     authorization: auth,
+//   },
+// });
 
 export default function Explore() {
   const { isAuthenticated, user } = useMoralis();
@@ -113,7 +113,7 @@ export default function Explore() {
   return (
     <>
       <MoralisProvider appId={API_ID} serverUrl={SERVER_URL}>
-        <div className="sm:h-[100vh] md:h-[100vh] h-screen bg-transparent">
+        <div className="flex flex-row sm:h-[100vh] md:h-[100vh] h-screen bg-transparent">
           {loadingState === "loaded" &&
             campaigns.map((campaign, i) => (
               <CampaignCard campaign={campaign} content={content[i]} key={i} />
