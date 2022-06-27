@@ -91,9 +91,9 @@ const CampaignCard = (props) => {
   }
 
   return (
-    <div>
-      <img src={content.image} className="rounded w-60 mt-10 ml-10" />
-      <button className="text-white ml-10" onClick={toggle}>
+    <div className="mr-8 ml-12">
+      <img src={content.image} className="rounded w-60 mt-10 " />
+      <button className="text-white " onClick={toggle}>
         {playing ? (
           <img
             className="w-12 rounded-full bg-transparent -mt-40 ml-24"
@@ -106,9 +106,9 @@ const CampaignCard = (props) => {
           />
         )}
       </button>
-      <h3 className="text-white text-xl mb-2 ml-10">{campaign.contentName}</h3>
-      <p className="text-gray-400 w-60 ml-10">{campaign.contentInfo}</p>
-      <div className="flex flex-row ml-10 mt-2">
+      <h3 className="text-white text-xl mb-2 ">{campaign.contentName}</h3>
+      <p className="text-gray-400 w-60 ">{campaign.contentInfo}</p>
+      <div className="flex flex-row  mt-2">
         <h3 className="text-white text-lg ">{`Goal: ${ethers.utils.formatEther(
           goal
         )}`}</h3>
@@ -120,7 +120,7 @@ const CampaignCard = (props) => {
       </div>
       {isAuthenticated && (
         <button
-          className="font-bold mt-6 mb-24 ml-10 lg:w-48 md:w-36 sm:w-24 bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-600 hover:to-orange-600 text-white rounded p-4 shadow-lg"
+          className="font-bold mt-6 mb-24  lg:w-48 md:w-36 sm:w-24 bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-600 hover:to-orange-600 text-white rounded p-4 shadow-lg"
           onClick={onContribute}
         >
           Contribute
