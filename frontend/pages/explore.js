@@ -93,8 +93,8 @@ export default function Explore() {
   return (
     <>
       <MoralisProvider appId={API_ID} serverUrl={SERVER_URL}>
-        <div className="flex flex-row flex-wrap ">
-          <div className="flex flex-row flex-wrap ">
+        <div className="h-screen bg-black">
+          <div className="flex flex-row flex-wrap ml-20">
             {loadingState === "loaded" &&
               campaigns.map((campaign, i) => (
                 <CampaignCard

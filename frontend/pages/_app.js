@@ -8,7 +8,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_MORALIS_SERVER_URL;
 function App({ Component, pageProps }) {
   return (
     <MoralisProvider appId={API_ID} serverUrl={SERVER_URL}>
-      <div className="bg-black">
+      <div className="bg-black lg:h-screen">
         <Navbar />
         <Component {...pageProps} />
       </div>
