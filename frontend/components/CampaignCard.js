@@ -40,37 +40,35 @@ const CampaignCard = (props) => {
   const { user, isAuthenticated } = useMoralis();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      let campaignHandlerContract;
+    let campaignHandlerContract;
 
-      const onNewContribution = (sender, amount, campaignId) => {
-        console.log("NewContribution", sender, amount, campaignId);
-        // if (
-        //   sender === user.attributes.ethAddress &&
-        //   campaignId === campaign.campaignId - 1
-        // )
-        {
-          setTotal(amount);
-          setGoal(ethers.BigNumber.from(campaign.goal).sub(total));
-        }
-      };
+    const onNewContribution = (sender, amount, campaignId) => {
+      console.log("NewContribution", sender, amount, campaignId);
+      // if (
+      //   sender === user.attributes.ethAddress &&
+      //   campaignId === campaign.campaignId - 1
+      // )
+      {
+        setTotal(amount);
+        setGoal(ethers.BigNumber.from(campaign.goal).sub(total));
+      }
+    };
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
 
-      campaignHandlerContract = new ethers.Contract(
-        campaignHandlerAddress,
-        CampaignHandler.abi,
-        signer
-      );
-      campaignHandlerContract.on("LogContribute", onNewContribution);
+    campaignHandlerContract = new ethers.Contract(
+      campaignHandlerAddress,
+      CampaignHandler.abi,
+      signer
+    );
+    campaignHandlerContract.on("LogContribute", onNewContribution);
 
-      return () => {
-        if (campaignHandlerContract) {
-          campaignHandlerContract.off("LogContribute", onNewContribution);
-        }
-      };
-    }
+    return () => {
+      if (campaignHandlerContract) {
+        campaignHandlerContract.off("LogContribute", onNewContribution);
+      }
+    };
   }, []);
 
   async function onContribute() {
