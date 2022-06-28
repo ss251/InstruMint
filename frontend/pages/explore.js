@@ -1,29 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { MoralisProvider } from "react-moralis";
 import Moralis from "moralis";
 import CampaignHandler from "../utils/CampaignHandler.json";
 
-const API_ID = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
-const SERVER_URL = process.env.NEXT_PUBLIC_MORALIS_SERVER_URL;
-
-import { nftAddress, campaignHandlerAddress } from "../config";
+import { campaignHandlerAddress } from "../config";
 import CampaignCard from "../components/CampaignCard";
 
 const ethers = Moralis.web3Library;
-
-// const projectId = "2B3vjaKKVpRqv8a6IZeS5CyPkwg";
-// const projectSecret = "cb0b062f98aa8c0fd5451253b537d257";
-// const auth =
-//   "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
-
-// const client = create({
-//   host: "ipfs.infura.io",
-//   port: 5001,
-//   protocol: "https",
-//   headers: {
-//     authorization: auth,
-//   },
-// });
 
 export default function Explore() {
   const [campaigns, setCampaigns] = useState([]);
@@ -87,20 +69,14 @@ export default function Explore() {
 
   return (
     <>
-      <MoralisProvider appId={API_ID} serverUrl={SERVER_URL}>
-        <div className="bg-black">
-          <div className="flex flex-row flex-wrap justify-center">
-            {loadingState === "loaded" &&
-              campaigns.map((campaign, i) => (
-                <CampaignCard
-                  campaign={campaign}
-                  content={content[i]}
-                  key={i}
-                />
-              ))}
-          </div>
+      <div className="bg-black">
+        <div className="flex flex-row flex-wrap justify-center">
+          {loadingState === "loaded" &&
+            campaigns.map((campaign, i) => (
+              <CampaignCard campaign={campaign} content={content[i]} key={i} />
+            ))}
         </div>
-      </MoralisProvider>
+      </div>
     </>
   );
 }
