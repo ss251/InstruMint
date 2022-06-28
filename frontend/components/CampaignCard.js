@@ -184,7 +184,7 @@ const CampaignCard = (props) => {
         )}`}</h3>
         <img className="w-10" src="/polygon-logo.svg" />
       </div>
-      {isAuthenticated && !isFunded && (
+      {isAuthenticated && !isFunded && !props.page === "profile" && (
         <button
           className="font-bold mt-6 mb-24  lg:w-48 md:w-36 sm:w-24 bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-600 hover:to-orange-600 text-white rounded p-4 shadow-lg"
           onClick={onContribute}
