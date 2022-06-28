@@ -115,10 +115,10 @@ const CampaignCard = (props) => {
     );
 
     await campaignHandlerContract.contribute(
-      ethers.utils.parseEther("0.5"),
+      ethers.utils.parseEther("0.01"),
       campaign.campaignId - 1,
       {
-        value: ethers.utils.parseEther("0.5"),
+        value: ethers.utils.parseEther("0.01"),
       }
     );
   }
