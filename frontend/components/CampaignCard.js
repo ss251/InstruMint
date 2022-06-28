@@ -35,7 +35,23 @@ const CampaignCard = (props) => {
 
   const { isAuthenticated } = useMoralis();
 
-  const [playing, toggle] = useAudio(content.animation_url);
+  let animation_url = content.animation_url;
+  if (animation_url.indexOf("http") === -1) {
+    animation_url = `https://ipfs.infura.io/ipfs/${content.animation_url.substring(
+      7,
+      content.animation_url.length
+    )}`;
+  }
+
+  let image_url = content.image;
+  if (image_url.indexOf("http") === -1) {
+    image_url = `https://ipfs.infura.io/ipfs/${content.image.substring(
+      7,
+      content.image.length
+    )}`;
+  }
+
+  const [playing, toggle] = useAudio(animation_url);
   const [goal, setGoal] = useState(campaign.goal);
   const [total, setTotal] = useState(campaign.total);
   const isFunded = campaign.isFunded;
@@ -142,7 +158,7 @@ const CampaignCard = (props) => {
 
   return (
     <div className="mr-8 ml-12">
-      <img src={content.image} className="rounded w-60 mt-10 " />
+      <img src={image_url} className="rounded w-60 mt-10 " />
       <button className="text-white " onClick={toggle}>
         {playing ? (
           <img

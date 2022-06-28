@@ -18,6 +18,7 @@ export default function Create() {
   const [imgFileUrl, setImgFileUrl] = useState(null);
   const [audioFileUrl, setAudioFileUrl] = useState(null);
   const [ipfsCID, setIpfsCID] = useState("");
+  const [previewURL, setPreviewURL] = useState("");
   const [formInputContent, updateFormInputContent] = useState({
     name: "",
     description: "",
@@ -97,8 +98,9 @@ export default function Create() {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const url = `ipfs://${added.path}`;
       setImgFileUrl(url);
+      setPreviewURL(`https://ipfs.io/ipfs/${added.path}`);
       updateFormInputContent({
         ...formInputContent,
         image: url,
@@ -114,7 +116,7 @@ export default function Create() {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const url = `ipfs://${added.path}`;
       setAudioFileUrl(url);
       updateFormInputContent({
         ...formInputContent,
@@ -167,9 +169,9 @@ export default function Create() {
                 className="my-4 mt-2"
                 onChange={onChangeImg}
               />
-              {!imgFileUrl && <img src="/uploadimg.png" />}
-              {imgFileUrl && (
-                <img className="rounded mt-4" width="350" src={imgFileUrl} />
+              {!previewURL && <img src="/uploadimg.png" />}
+              {previewURL && (
+                <img className="rounded mt-4" width="350" src={previewURL} />
               )}
               <h4 className="w-140 mt-8 mb-2 font-bold text-gray-400">
                 VIDEO, AUDIO, OR 3D MODEL
