@@ -36,6 +36,7 @@ const CampaignCard = (props) => {
   const [playing, toggle] = useAudio(content.animation_url);
   const [goal, setGoal] = useState(campaign.goal);
   const [total, setTotal] = useState(campaign.total);
+  const [isActive, setIsActive] = useState(campaign.isActive);
 
   const { user, isAuthenticated } = useMoralis();
 
@@ -44,13 +45,8 @@ const CampaignCard = (props) => {
 
     const onNewContribution = (sender, amount, campaignId) => {
       console.log("NewContribution", sender, amount, campaignId);
-      // if (
-      //   sender === user.attributes.ethAddress &&
-      //   campaignId === campaign.campaignId - 1
-      // )
-      {
-        setTotal(amount);
-        setGoal(ethers.BigNumber.from(campaign.goal).sub(total));
+      if (campaignId === campaign.campaignId - ethers.BigNumber.from(1)) {
+        setTotal(ethers.BigNumber.from(campaign.total).add(amount));
       }
     };
 
@@ -80,6 +76,8 @@ const CampaignCard = (props) => {
       CampaignHandler.abi,
       signer
     );
+
+    await function checkCampaignFunded() {};
 
     await campaignHandlerContract.contribute(
       ethers.utils.parseEther("0.1"),

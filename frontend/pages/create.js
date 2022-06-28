@@ -126,7 +126,7 @@ export default function Create() {
   }
 
   return (
-    <div>
+    <div className="bg-black">
       {isAuthenticated ? (
         <div className="lg:w-1/4 w-1/2 lg:ml-60 ml-24 -mt-8 lg:mt-0 flex flex-col pb-12">
           <h1 className="mt-20 font-bold text-3xl text-gray-400">

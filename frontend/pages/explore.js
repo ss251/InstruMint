@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { MoralisProvider } from "react-moralis";
 import Moralis from "moralis";
-import axios from "axios";
-import { create as ipfsHttpClient } from "ipfs-http-client";
 import CampaignHandler from "../utils/CampaignHandler.json";
 
 const API_ID = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
 const SERVER_URL = process.env.NEXT_PUBLIC_MORALIS_SERVER_URL;
 
 import { nftAddress, campaignHandlerAddress } from "../config";
-import { create } from "ipfs-http-client";
 import CampaignCard from "../components/CampaignCard";
 
 const ethers = Moralis.web3Library;
@@ -30,7 +26,6 @@ const ethers = Moralis.web3Library;
 // });
 
 export default function Explore() {
-  const { isAuthenticated, user } = useMoralis();
   const [campaigns, setCampaigns] = useState([]);
   const [ipfsCID, setIpfsCID] = useState("");
   const [content, setContent] = useState([]);
