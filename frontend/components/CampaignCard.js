@@ -101,7 +101,7 @@ const CampaignCard = (props) => {
       .catch(function (error) {
         console.log(error);
       });
-    setOpensea(`${OPENSEA_LINK}/${tokenURI}`);
+    setOpensea(`${OPENSEA_LINK}/${ethers.BigNumber.from(tokenURI).toNumber()}`);
   }
 
   async function onContribute() {
